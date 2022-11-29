@@ -4,6 +4,7 @@ const router = Router();
 
 
 router.get('/', controller.home);
-router.get('/articles', controller.getArticles)
+router.get('/articles', controller.getArticles);
+router.get('/articles/:articleId', controller.getArticles);
 
 module.exports = router;

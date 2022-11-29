@@ -7,7 +7,7 @@ const home = function(req, res) {
 const getArticles = function(req, res) {
     models.Article.find({}, function(err, result) {
         if (err)
-            res.sendStatus(500).render('server_error', {});
+            res.render('server_error', {});
         else
             res.send(result);
     });
