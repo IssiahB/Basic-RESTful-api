@@ -42,8 +42,30 @@ const postArticle = function(req, res) {
     });
 }
 
+const deleteArticles = function(req, res) {
+    const articleId = req.body.articleId;
+
+    // Delete all articles
+    if (articleId == undefined) {
+        models.Article.deleteMany({}, function(err) {
+            if (err)
+                res.render('server_error', {errors: err});
+            else
+                res.send('Success');
+        });
+    } else {
+        models.Article.findByIdAndDelete(articleId, null, function(err, doc) {
+            if (err)
+                res.render('server_error', {errors: err});
+            else
+                res.send(doc);
+        });
+    }
+}
+
 module.exports = {
     home,
     getArticles,
     postArticle,
+    deleteArticles,
 }
