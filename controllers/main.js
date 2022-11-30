@@ -1,8 +1,11 @@
+const { Model, model } = require('mongoose');
 const models = require('../models/project_models.js');
 
 const home = function(req, res) {
     res.render('index', {});
 }
+
+////////////////////////// Getting Articles //////////////////////////
 
 const getArticles = function(req, res) {
     const articleId = req.params.articleId;
@@ -25,6 +28,8 @@ const getArticles = function(req, res) {
     }
 }
 
+////////////////////////// Creating Articles //////////////////////////
+
 const postArticle = function(req, res) {
     const postTitle = req.body.title;
     const postContent = req.body.content;
@@ -41,6 +46,8 @@ const postArticle = function(req, res) {
             res.send(newModel._id);
     });
 }
+
+////////////////////////// Deleting Articles //////////////////////////
 
 const deleteArticles = function(req, res) {
     const articleId = req.body.articleId;
@@ -63,9 +70,56 @@ const deleteArticles = function(req, res) {
     }
 }
 
+////////////////////////// Updating Whole Articles //////////////////////////
+
+const replaceArticle = function(req, res) {
+    const articleId = req.params.articleId;
+    const newTitle = req.body.title;
+    const newContent = req.body.content;
+
+    const newArticle = {
+        title: newTitle,
+        content: newContent
+    }
+
+    models.Article.replaceOne({_id: articleId}, newArticle, null, function(err, result) {
+        if (err)
+            res.render('server_error', {errors: err});
+        else
+            res.send(result);
+    });
+}
+
+
+
+////////////////////////// Updating Article Parts //////////////////////////
+
+const updateArticle = function(req, res) {
+    const articleId = req.params.articleId;
+    const newTitle = req.body.title;
+    const newContent = req.body.content;
+
+    const updatedPart = {};
+    
+    // To ensure that a field is not set to undefined if one isn't given
+    if (newTitle) 
+        updatedPart.title = newTitle;
+    if (newContent)
+        updatedPart.content = newContent;
+
+    models.Article.updateOne({_id: articleId}, updatedPart, function(err, result) {
+        if (err)
+            res.render('server_error', {errors: err});
+        else
+            res.send(result);
+    });
+}
+
 module.exports = {
     home,
     getArticles,
     postArticle,
     deleteArticles,
+    replaceArticle,
+    updateArticle
 }

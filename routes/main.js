@@ -4,9 +4,15 @@ const router = Router();
 
 
 router.get('/', controller.home);
-router.get('/articles', controller.getArticles);
-router.get('/articles/:articleId', controller.getArticles);
-router.post('/articles', controller.postArticle);
-router.delete('/articles', controller.deleteArticles);
+
+router.route('/articles')
+.get(controller.getArticles)
+.post(controller.postArticle)
+.delete(controller.deleteArticles);
+
+router.route('/articles/:articleId')
+.get(controller.getArticles)
+.put(controller.replaceArticle)
+.patch(controller.updateArticle);
 
 module.exports = router;
